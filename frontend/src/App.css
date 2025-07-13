@@ -1,0 +1,958 @@
+/* FORCE HTML AND BODY TO FILL THE ENTIRE VIEWPORT */
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%; /* Make them take full viewport height */
+  width: 100%;  /* Make them take full viewport width */
+  font-family: Arial, sans-serif;
+  overflow: auto; /* Allow scrolling if content exceeds viewport height */
+  /* Remove any background color from html/body here if you want app-container to define it */
+}
+
+/* THE MAIN APP CONTAINER - NOW RESPONSIBLE FOR FULL PAGE COVERAGE AND CENTERING ITS CONTENT */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;   /* THIS CENTERS CHILD ITEMS HORIZONTALLY */
+  justify-content: center; /* THIS CENTERS CHILD ITEMS VERTICALLY */
+  min-height: 100vh;     /* Ensures it takes at least the full viewport height */
+  width: 100vw;          /* Use 100vw to ensure it spans the *entire* viewport width */
+  background-color: #f0f2f5; /* Your desired background color for the whole page */
+  padding: 20px;         /* Padding around the entire content area */
+  box-sizing: border-box; /* Includes padding in the total width/height */
+}
+
+/* Ensure the welcome message content is centered within its own space */
+.welcome-message {
+  text-align: center; /* Centers text and inline/inline-block elements */
+  margin-bottom: 30px;
+  color: #333;
+  max-width: 700px; /* Limits the width of the welcome text for readability */
+  width: 100%;      /* Ensures it expands to allow text-align: center to work fully */
+  box-sizing: border-box; /* Important for width calculations with padding */
+}
+
+.welcome-message h1 {
+  font-size: 2.5em;
+  margin-bottom: 10px;
+  color: #00ffc3;
+}
+
+.welcome-message p {
+  font-size: 1.1em;
+  line-height: 1.6;
+}
+
+/* The authentication container (login/signup form box) */
+.auth-container {
+  background-color: #fff;
+  padding: 30px 40px;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  width: 100%;         /* Takes full width of its parent's content area (up to max-width) */
+  max-width: 400px;    /* Constrains the form box's maximum width */
+  box-sizing: border-box; /* Essential for padding/width calculations */
+  /* Remove margin-left: auto; margin-right: auto; as align-items: center on parent will handle it */
+}
+
+.auth-container h2 {
+  color: #333;
+  margin-bottom: 25px;
+  font-size: 1.8em;
+  text-align: center; /* Ensure heading is centered within auth-container */
+}
+
+/* Make the form a flex container to center its internal elements */
+.auth-container form {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centers elements like form-group and button horizontally */
+  width: 100%; /* Ensures form takes full width to align children */
+}
+
+/* Form groups holding labels and inputs */
+.form-group {
+  margin-bottom: 20px;
+  text-align: left; /* Aligns label text and input content to the left */
+  width: 100%; /* Crucial for inputs to align consistently */
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  color: #555;
+  font-weight: bold;
+}
+
+/* Universal input and select styles for consistent sizing */
+.form-group input[type="text"],
+.form-group input[type="password"],
+.form-group input[type="email"],
+.select-input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 16px;
+  box-sizing: border-box;
+  display: block;
+  background-image: url('data:image/svg+xml;charset=US-ASCII,...'); /* your current arrow */
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 16px 16px;
+  cursor: pointer;
+
+  /* 🛠️ FIX: Hide default arrow */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+.user-profile-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  position: relative;
+}
+.coin-display {
+  margin-right: 20px;
+}
+
+
+/* Button styling for consistent width with inputs */
+.sign-in-button {
+  background-color: #007bff;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1em;
+  width: 100%; /* Make button take 100% of the form width */
+  margin-top: 10px;
+  transition: background-color 0.3s ease;
+  box-sizing: border-box; /* Essential for consistent width */
+}
+
+.sign-in-button:hover {
+  background-color: #0056b3;
+}
+
+/* Styling for various links/text below forms */
+.link-option, .signup-text {
+  margin-top: 20px;
+  font-size: 0.9em;
+  color: #007bff;
+  cursor: pointer;
+  display: block; /* Ensures they are block-level to apply text-align */
+  text-align: center; /* Centers the text content */
+  width: 100%; /* Allows text-align to work across the full available width */
+}
+
+.link-option:hover, .signup-text a:hover {
+  text-decoration: underline;
+}
+
+.signup-text {
+  color: #555;
+}
+
+.view-button {
+  background-color: #007bff;
+  color: white;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.9em;
+  cursor: pointer;
+  margin-left: 15px;
+  flex-shrink: 0;
+  transition: background-color 0.3s ease;
+}
+
+.view-button:hover {
+  background-color: #0056b3;
+}
+
+.signup-text a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+/* Specific styles for messages (OTP, error, success) */
+.error-message, .success-message {
+  margin-bottom: 15px;
+  font-size: 14px;
+  text-align: center; /* Ensures these messages are centered */
+  width: 100%; /* Allows text-align to work across full width */
+}
+
+
+.error-message {
+  color: red;
+  margin-top: -15px; /* Adjust spacing as needed */
+  font-weight: bold;
+}
+
+.success-message {
+  color: #28a745;
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+/* Custom dropdown arrow for select */
+.select-input {
+  background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23007bff%22%20d%3D%22M287%2C189.394a30.222%2C30.222%2C0%2C0%2C0%2C-13.88%2C-7.423L146.2%2C71.391a30.124%2C30.124%2C0%2C0%2C0%2C-36.42%2C0L13.88%2C181.971a30.222%2C30.222%2C0%2C0%2C0%2C-13.88%2C7.423A30.267%2C30.267%2C0%2C0%2C0%2C0%2C200a30.267%2C30.267%2C0%2C0%2C0%2C13.88%2C10.606A30.124%2C30.124%2C0%2C0%2C0%2C40.3%2C210h211.8a30.124%2C30.124%2C0%2C0%2C0%2C26.42%2C-10.606A30.267%2C30.267%2C0%2C0%2C0%2C292.4%2C200a30.267%2C30.267%2C0%2C0%2C0%2C-5.4%2C-10.606Z%22%2F%3E%3C%2Fsvg%3E');
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 16px 16px;
+  cursor: pointer;
+}
+
+
+/* MAIN PAGE STYLES */
+.main-page-wrapper {
+  background-color: #fff;
+  padding: 30px 40px;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 900px; /* Wider for main content */
+  box-sizing: border-box;
+  margin: 20px; /* Add some margin around the main page wrapper */
+}
+
+.main-page-header {
+  display: flex; /* Use flexbox for alignment */
+  justify-content: space-between; /* Pushes items to ends */
+  align-items: center; /* Vertically centers items */
+  margin-bottom: 30px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #eee;
+}
+
+.main-page-header h1 {
+  font-size: 2.2em;
+  color: #333;
+  margin: 0; /* Remove default margin */
+  flex-grow: 1; /* Allow heading to take available space */
+}
+
+.user-profile-circle {
+  background-color: #e6e93f; /* Bootstrap */
+  color: white;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-weight: bold;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.user-dropdown {
+  position: absolute;
+  top: 110%;               /* below the profile circle */
+  right: 0;                /* align dropdown's right edge to the circle's right edge */
+  transform: none;         /* remove shift */
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  min-width: 150px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  padding: 10px 0;
+}
+
+
+.user-dropdown button:first-child {
+  background-color: #e0e0e0; /* light gray */
+  color: #000;               /* optional: dark text */
+  border: none;
+}
+
+.user-dropdown button:first-child:hover {
+  background-color: #cfcfcf; /* darker on hover */
+}
+
+.user-profile-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-username {
+  padding: 8px 15px;
+  font-size: 0.9em;
+  color: #555;
+  border-bottom: 1px solid #eee;
+  margin-bottom: 5px;
+}
+
+.dropdown-signout-button {
+  background-color: #dc3545;
+  color: white;
+  padding: 8px 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9em;
+  margin: 5px 10px 0; /* Top margin, horizontal margin, no bottom margin */
+  transition: background-color 0.2s ease;
+  width: auto; /* Allow button to size based on content */
+  align-self: stretch; /* Make button fill dropdown width */
+}
+
+.dropdown-signout-button:hover {
+  background-color: #c82333;
+}
+
+
+/* Filter Section */
+.filter-section {
+  margin-bottom: 30px;
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid #eee;
+}
+
+.toggle-filters-button {
+  background-color: purple;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1em;
+  margin-bottom: 15px;
+  transition: background-color 0.3s ease;
+}
+
+.toggle-filters-button:hover {
+  background-color: #c209f6;
+}
+
+.filter-options-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Responsive columns */
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.filter-group label {
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #555;
+}
+
+.filter-group select,
+.filter-group input[type="date"] {
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+
+.clear-filters-button {
+  padding: 8px;
+  font-size: 0.9em;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #f0ad4e;
+  color: white;
+  cursor: pointer;
+  width: 100%;
+  box-sizing: border-box;
+  height: 38px;
+  align-self: stretch;       /* Ensure it stretches like select/input */
+  margin-top: 0;          /* Push it down to align baseline with others */
+}
+
+.apply-filters-button {
+  background-color: #007bff;
+  color: white;
+}
+
+.apply-filters-button:hover {
+  background-color: #0056b3;
+}
+
+.clear-filters-button {
+  background-color: #f0ad4e; /* Warning-like color */
+  color: white;
+}
+
+.clear-filters-button:hover {
+  background-color: #ec971f;
+}
+
+
+/* General Section Styling */
+.main-section {
+  margin-bottom: 30px;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.main-section h3 {
+  color: #333;
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-size: 1.6em;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+}
+
+/* Upcoming Bookings Section */
+.upcoming-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.upcoming-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 15px;
+  border: 1px solid #e0e0e0;
+  border-left: 5px solid #007bff; /* Highlight on the left */
+  border-radius: 5px;
+  background-color: #fefefe;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.upcoming-type {
+  background-color: #007bff;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 3px;
+  font-size: 0.8em;
+  margin-right: 15px;
+  flex-shrink: 0;
+}
+
+.upcoming-name {
+  font-weight: bold;
+  color: #333;
+  flex: 1 1 auto; /* Allows it to grow and shrink */
+  margin-right: 15px;
+}
+
+.upcoming-details {
+  font-size: 0.9em;
+  color: #777;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+/* Manage Options Section */
+.manage-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 15px;
+}
+
+.main-option-button {
+  background-color: #4CAF50; /* Green */
+  color: white;
+  padding: 15px 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1em;
+  font-weight: bold;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  text-align: center;
+  box-sizing: border-box;
+  display: flex; /* For icon and text alignment */
+  align-items: center;
+  justify-content: center;
+  gap: 8px; /* Space between icon and text */
+}
+
+.main-option-button:hover {
+  background-color: #45a049;
+  transform: translateY(-2px);
+}
+
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .app-container {
+    padding: 10px;
+  }
+
+  .welcome-message {
+    margin-bottom: 20px;
+  }
+
+  .welcome-message h1 {
+    font-size: 1.8em;
+  }
+
+  .welcome-message p {
+    font-size: 1em;
+  }
+
+  .auth-container {
+    padding: 20px 25px;
+  }
+
+  .auth-container h2 {
+    font-size: 1.5em;
+  }
+
+  .sign-in-button {
+    padding: 10px 15px;
+  }
+
+  .main-page-wrapper {
+    padding: 20px;
+    margin: 10px;
+  }
+
+  .main-page-header {
+    flex-direction: row; /* Keep row for header */
+    align-items: center; /* Center items vertically */
+    justify-content: space-between; /* Space out items */
+  }
+
+  .main-page-header h1 {
+    font-size: 1.6em;
+    text-align: left; /* Align text left */
+    flex-grow: 1;
+    margin-right: 10px; /* Small margin to separate from circle */
+  }
+  
+  .user-profile-wrapper {
+    position: relative;
+    display: inline-block;
+  }
+
+
+  .user-dropdown {
+    position: absolute;
+    top: 110%;          /* Just below the circle */
+    left: 0;            /* Align to left of the wrapper */
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    min-width: 150px;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    padding: 10px 0;
+  }
+
+
+
+  .toggle-filters-button {
+    width: 100%;
+  }
+
+  .filter-options-container {
+    grid-template-columns: 1fr; /* Stack filters vertically */
+  }
+
+  .main-section h3 {
+    font-size: 1.3em;
+  }
+
+  .upcoming-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+  }
+
+  .upcoming-type {
+    margin-right: 0;
+    margin-bottom: 5px;
+  }
+
+  .upcoming-name {
+    width: 100%;
+    text-align: left;
+    margin-right: 0;
+  }
+
+  .upcoming-details {
+    width: 100%;
+    text-align: left;
+  }
+
+  .manage-options {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+/* Profile Page Specific Styles */
+.profile-section {
+  background-color: #ffffff;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  margin-top: 20px;
+  width: 100%;
+  max-width: 600px;
+}
+
+.profile-form .form-group {
+  margin-bottom: 20px;
+}
+
+.profile-form label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+  color: #555;
+}
+
+.profile-form input[type="text"],
+.profile-form input[type="email"],
+.profile-form input[type="tel"] {
+  width: calc(100% - 20px);
+  padding: 12px 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1em;
+  transition: border-color 0.3s ease;
+}
+
+.profile-form input[type="text"]:focus,
+.profile-form input[type="email"]:focus,
+.profile-form input[type="tel"]:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+.profile-form input:disabled {
+  background-color: #f5f5f5;
+  color: #777;
+  cursor: not-allowed;
+}
+
+.profile-actions {
+  display: flex;
+  gap: 15px;
+  margin-top: 25px;
+}
+
+.profile-actions .save-button {
+  background-color: #28a745; /* Green */
+}
+
+.profile-actions .cancel-button {
+  background-color: #6c757d; /* Gray */
+}
+
+.profile-actions .save-button:hover,
+.profile-actions .cancel-button:hover {
+  opacity: 0.9;
+}
+
+.success-message {
+  color: #28a745;
+  font-weight: bold;
+  margin-top: 15px;
+  text-align: center;
+}
+
+.privacy-section {
+  margin-top: 30px;
+  text-align: center;
+  background-color: #ffffff;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  width: 100%;
+  max-width: 600px;
+}
+
+.back-to-home-link {
+  margin-top: 30px;
+  text-align: center;
+}
+
+.profile-photo-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.profile-photo-circle {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #ccc;
+}
+
+.profile-photo-initial {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background-color: #e6e93f;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 36px;
+  border: 2px solid #ccc;
+}
+
+.edit-photo-button {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9em;
+  transition: background-color 0.3s ease;
+  position: relative;
+  display: inline-block;
+}
+
+.edit-photo-button:hover {
+  background-color: #0056b3;
+}
+
+.password-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-input-wrapper input[type="password"],
+.password-input-wrapper input[type="text"] {
+  width: 100%;
+  padding-right: 40px;
+}
+
+.toggle-password-button {
+  position: absolute;
+  right: 10px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 1.2em;
+}
+
+.save-password-button {
+  background-color: #28a745;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  font-size: 1em;
+  margin-top: 20px;
+  cursor: pointer;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.save-password-button:hover {
+  background-color: #218838;
+}
+
+.logout-button {
+  background-color: #dc3545;
+  margin-top: 20px;
+}
+
+.logout-button:hover {
+  background-color: #c82333;
+}
+
+.profile-actions {
+  display: flex;
+  gap: 15px;
+  margin-top: 25px;
+}
+
+.save-button {
+  background-color: #28a745;
+  color: white;
+}
+
+.logout-button {
+  background-color: #dc3545;
+  color: white;
+}
+
+.logout-button:hover {
+  background-color: #c82333;
+}
+
+.save-button:hover {
+  background-color: #218838;
+}
+
+.toggle-password-button {
+  position: absolute;
+  right: 10px;
+  background: transparent;
+  border: none;
+  color: #007bff;
+  font-size: 0.9em;
+  cursor: pointer;
+}
+
+.toggle-password-button:hover {
+  text-decoration: underline;
+}
+
+.toggle-password-button {
+  position: absolute;
+  right: 10px;
+  background: transparent;
+  border: none;
+  color: #007bff;
+  font-size: 0.85em;
+  cursor: pointer;
+}
+
+.toggle-password-button:hover {
+  text-decoration: underline;
+}
+
+/* Your existing CSS... */
+
+/* New styles for password hide/show functionality */
+.password-input-wrapper {
+  position: relative; /* Essential for positioning the button inside */
+  display: flex; /* Helps align input and button if needed, though button is absolute */
+  align-items: center; /* Vertically centers the button if it were inline */
+  width: 100%; /* Ensures the wrapper takes full width like the input */
+}
+
+.password-input-wrapper input[type="password"],
+.password-input-wrapper input[type="text"] {
+  width: 100%; /* Make input take full width of its wrapper */
+  padding-right: 40px; /* Make space for the button */
+  /* Re-apply other input styles here if they were specific to type="password" before */
+}
+
+.toggle-password-button {
+  position: absolute; /* Position the button absolutely within its relative parent */
+  right: 10px;        /* 10px from the right edge of the input field */
+  background: transparent; /* No background */
+  border: none;       /* No border */
+  cursor: pointer;    /* Pointer cursor on hover */
+  font-size: 0.85em;  /* Adjust font size as needed */
+  color: #007bff;     /* Match link color */
+  padding: 0 5px;     /* Small padding for click area */
+  height: 100%;       /* Make button height cover the input height for easier click */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  top: 0;             /* Align to top of wrapper */
+}
+
+.toggle-password-button:hover {
+  text-decoration: underline; /* Underline on hover */
+}
+
+/* Existing styles... */
+
+/* Styles for Booking.jsx */
+.page-title {
+  text-align: center;
+  color: #333;
+  margin-bottom: 25px;
+  font-size: 2em;
+  font-weight: bold;
+}
+
+.no-bookings-message {
+  text-align: center;
+  color: #666;
+  font-size: 1.1em;
+  padding: 30px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.bookings-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  padding: 20px;
+}
+
+.booking-card {
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  text-align: left;
+  transition: transform 0.2s ease-in-out;
+}
+
+.booking-card:hover {
+  transform: translateY(-5px);
+}
+
+.booking-card h3 {
+  color: #007bff;
+  margin-top: 0;
+  margin-bottom: 15px;
+  font-size: 1.5em;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 10px;
+}
+
+.booking-card p {
+  margin-bottom: 8px;
+  color: #555;
+  line-height: 1.5;
+}
+
+.booking-card p strong {
+  color: #333;
+}
+
+.booking-card .cancel-button {
+  background-color: #dc3545; /* Red color for cancel */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px;
+  cursor: pointer;
+  font-size: 1em;
+  margin-top: 15px;
+  transition: background-color 0.2s ease;
+  width: 100%; /* Make button full width */
+}
+
+.booking-card .cancel-button:hover {
+  background-color: #c82333;
+}
+
+/* Ensure consistent button styling across pages */
+.main-header .nav-button.active {
+  background-color: #0056b3; /* Darker blue for active state */
+}
+
+.centered-error {
+  color: red;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 10px;
+}
