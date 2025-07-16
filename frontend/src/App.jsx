@@ -1,14 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
 import MainPage from './MainPage';
 import Summary from './Summary';
 import './App.css';
 import ProfilePage from './profile';
 import Bookings from './booking';
-import { useEffect } from 'react';
 import { loginUser, signupUser } from './api';
-
-// This component will contain all your login/signup logic and has access to useNavigate
 function AuthFlows({
   showForgotPassword, setShowForgotPassword,
   showSignUp, setShowSignUp,
@@ -27,71 +24,60 @@ function AuthFlows({
   accountType, setAccountType,
   setLoggedInUser,
   resetAllFlowsAndForms,
-  loginError, setLoginError,           // ✅ Added for login error handling
+  loginError, setLoginError,
   signupError, setSignupError,
-  forgotError, setForgotError        // ✅ Added for signup error handling
+  forgotError, setForgotError
 }) {
   const navigate = useNavigate();
- // CORRECT: AuthFlows is rendered inside Routes, which is inside BrowserRouter
-
-  // State for password visibility
   const [showLoginPassword, setShowLoginPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [showSignupPassword, setShowSignupPassword] = useState(false);
-
-
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
     setLoginError("");
-
     if (!loginUsername || !loginPassword) {
       console.log("Please enter both username and password to log in.");
       return;
     }
-
     try {
       const userData = await loginUser(loginUsername, loginPassword);
-
       setLoggedInUser(userData.username);
       localStorage.setItem("userId", userData.id);
       localStorage.setItem("loggedInUser", userData.username);
       localStorage.setItem("userCoins", userData.coins.toString());
       localStorage.setItem("myBookings", JSON.stringify(userData.bookings || []));
-      localStorage.setItem("userEmail", userData.email); // ✅ Move inside the try block
-
+      localStorage.setItem("userEmail", userData.email);
+      localStorage.setItem("userPlainPassword", loginPassword);
+      localStorage.setItem("profileImage", userData.profileImage ? `http://localhost:5000${userData.profileImage}` : "");
       navigate('/home');
-    } catch (err) {
+    } 
+    catch (err) {
       setLoginError("INVALID USERNAME OR PASSWORD");
     }
   };
-
   const handleForgotPasswordClick = () => {
     resetAllFlowsAndForms();
     setShowForgotPassword(true);
   };
-
   const handleSignUpClick = (e) => {
     e.preventDefault();
     resetAllFlowsAndForms();
     setSignupError("");
-    setLoginError(""); // ✅ Clear login error when switching to sign-up
+    setLoginError("");
     setShowSignUp(true);
   };
-
   const handleForgotEmailChange = (e) => {
     setForgotEmail(e.target.value);
   };
 
   const handleEmailSubmit = async (e) => {
     e.preventDefault();
-    setForgotError(""); // Clear previous error
-
+    setForgotError("");
     if (!forgotEmail) {
       alert("Please enter your email.");
       return;
     }
-
     try {
       const response = await fetch("http://localhost:5000/api/users/check-email", {
         method: "POST",
@@ -100,45 +86,32 @@ function AuthFlows({
         },
         body: JSON.stringify({ email: forgotEmail })
       });
-
       const data = await response.json();
-
       if (!response.ok) {
         setForgotError(data.error || "ACCOUNT DOES NOT EXIST");
         return;
       }
-
-      // Email exists — allow reset
-      console.log(`Proceeding with email: ${forgotEmail} for password reset`);
       setShowResetPassword(true);
-
-    } catch (err) {
+    } 
+    catch (err) {
       setForgotError("Server error. Please try again later.");
     }
   };
-
-
-
-
   const handleNewPasswordChange = (e) => {
     setNewPassword(e.target.value);
     setPasswordMismatchError(false);
   };
-
   const handleConfirmPasswordChange = (e) => {
     setConfirmPassword(e.target.value);
     setPasswordMismatchError(false);
   };
-
   const handleResetPasswordSubmit = async (e) => {
     e.preventDefault();
-
     if (newPassword !== confirmPassword) {
       setPasswordMismatchError(true);
       return;
     }
     setPasswordMismatchError(false);
-
     try {
       const response = await fetch("http://localhost:5000/api/users/reset-password", {
         method: "POST",
@@ -146,59 +119,48 @@ function AuthFlows({
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          email: forgotEmail,         // email entered during forgot step
-          newPassword: newPassword    // new password to update
+          email: forgotEmail,
+          newPassword: newPassword
         })
       });
-
       const data = await response.json();
-
       if (!response.ok) {
         setForgotError(data.error || "Password reset failed");
         return;
       }
-
       setSuccessMessageText("YOU SUCCESSFULLY CHANGED THE PASSWORD");
       setShowResetPassword(false);
       setShowSuccessMessage(true);
-
-    } catch (err) {
+    } 
+    catch (err) {
       setForgotError("Server error. Please try again later.");
     }
   };
-
-
   const handleCreateAccountSubmit = async (e) => {
     e.preventDefault();
     if (!forgotEmail || !accountType || !signupUsername || !signupPassword) {
       alert("Please fill in all fields.");
       return;
     }
-
     try {
       await signupUser(signupUsername, forgotEmail, signupPassword, accountType);
       setSuccessMessageText("YOU SUCCESSFULLY CREATED THE ACCOUNT");
       setShowSignUp(false);
       setShowSuccessMessage(true);
-    } catch (err) {
+    } 
+    catch (err) {
       setSignupError("ACCOUNT EXISTS");
     }
   };
-
-
-
   return (
   <>
-    {/* Welcome Message Header - Renders only with AuthFlows component */}
     <header className="welcome-message">
       <h1>Welcome to the Universal Ticket Booking System!</h1>
       <p>Your one-stop platform for booking movie tickets, concert tickets, and railway tickets.</p>
       <p>Seamlessly manage your bookings, profile, and more.</p>
     </header>
-
     <div className="auth-container">
       {!showForgotPassword && !showSignUp && !showResetPassword && !showSuccessMessage ? (
-        // Login Form
         <>
         {loginError && <p className="centered-error">{loginError}</p>}
           <h2>Login</h2>
@@ -244,13 +206,11 @@ function AuthFlows({
           </p>
         </>
       ) : showSuccessMessage ? (
-        // Success Message
         <>
           <p className="success-message">{successMessageText}</p>
           <button className="sign-in-button" onClick={resetAllFlowsAndForms}>LOGIN</button>
         </>
       ) : showSignUp ? (
-        // Unified Sign-Up Form
         <>
           {signupError && <p className="centered-error">{signupError}</p>}
           <h2>Sign Up</h2>
@@ -321,7 +281,6 @@ function AuthFlows({
           <p className="link-option" onClick={resetAllFlowsAndForms}>Back to Login</p>
         </>
       ) : showResetPassword ? (
-        // Reset Password Form
         <>
           <h2>Reset Password</h2>
           {passwordMismatchError && <p className="error-message">PASSWORDS DO NOT MATCH</p>}
@@ -373,7 +332,6 @@ function AuthFlows({
           <p className="link-option" onClick={resetAllFlowsAndForms}>Back to Login</p>
         </>
       ) : (
-        // Forgot Password Email Step
         <>
           {forgotError && (
             <p style={{
@@ -407,51 +365,33 @@ function AuthFlows({
     </div>
   </>
 );
-
 }
-
-
-// A new component to hold all the state and global handlers that need `useNavigate`
-// This component will be rendered inside BrowserRouter
 function AppContent() {
-  // All state variables are now managed in this top-level component that is inside BrowserRouter
   const [showForgotPassword, setShowForgotPassword] = useState(false);
   const [showSignUp, setShowSignUp] = useState(false);
   const [showResetPassword, setShowResetPassword] = useState(false);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
-
   const [loginUsername, setLoginUsername] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
-
   const [forgotEmail, setForgotEmail] = useState('');
-
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [passwordMismatchError, setPasswordMismatchError] = useState(false);
-
   const [signupUsername, setSignupUsername] = useState('');
   const [signupPassword, setSignupPassword] = useState('');
   const [accountType, setAccountType] = useState('');
-
   const [successMessageText, setSuccessMessageText] = useState('');
   const [loggedInUser, setLoggedInUser] = useState('');
-// State to track logged in user
   const [loginError, setLoginError] = useState("");
   const [signupError, setSignupError] = useState("");
   const [forgotError, setForgotError] = useState("");
   const navigate = useNavigate();
-
-// ✅ Logout user on every page refresh
   useEffect(() => {
     const storedUser = localStorage.getItem("loggedInUser");
     if (!storedUser) {
       navigate('/');
     }
   }, []);
-
- // CORRECT: This AppContent is now inside BrowserRouter
-  
-  // Helper to reset ALL relevant form-related states
   const resetFormStates = () => {
     setLoginUsername('');
     setLoginPassword('');
@@ -463,28 +403,24 @@ function AppContent() {
     setSignupPassword('');
     setAccountType('');
     setSuccessMessageText('');
-    setLoggedInUser(''); // Clear logged in user on 
-    localStorage.removeItem("loggedInUser"); // ✅ Clear on logout
-    localStorage.removeItem("myBookings"); // 🧼 Clear on logout
+    setLoggedInUser(''); 
+    localStorage.removeItem("loggedInUser");
+    localStorage.removeItem("myBookings");
+    localStorage.removeItem("profileImage");
   };
-
-  // Helper to reset ALL flow control states and form states
   const resetAllFlowsAndForms = () => {
     setShowForgotPassword(false);
     setShowSignUp(false);
     setShowResetPassword(false);
     setShowSuccessMessage(false);
-    setSignupError(""); // ✅ Clear sign-up error
+    setSignupError("");
     setLoginError("");
     resetFormStates();
-    navigate('/'); // Redirect to login page after reset/logout
+    navigate('/');
   };
-
-  const handleLogout = () => { // Logout handler
+  const handleLogout = () => {
     resetAllFlowsAndForms();
   };
-
-
   return (
     <div className="app-container">
       <Routes>
@@ -506,9 +442,9 @@ function AppContent() {
             accountType={accountType} setAccountType={setAccountType}
             setLoggedInUser={setLoggedInUser}
             resetAllFlowsAndForms={resetAllFlowsAndForms}
-            loginError={loginError} setLoginError={setLoginError}            // ✅ Added
+            loginError={loginError} setLoginError={setLoginError}
             signupError={signupError} setSignupError={setSignupError}  
-            forgotError={forgotError} setForgotError={setForgotError}      // ✅ Added
+            forgotError={forgotError} setForgotError={setForgotError}
           />
         } />
         <Route path="/home" element={
@@ -520,7 +456,7 @@ function AppContent() {
             loggedInUser={loggedInUser}
             handleLogout={handleLogout}
             loginPassword={loginPassword}
-            setLoggedInUser={setLoggedInUser} // This `loginPassword` state is from AppContent, consider if you need a separate password state in ProfilePage for updating password.
+            setLoggedInUser={setLoggedInUser}
           />
         } />
         <Route path="/bookings" element={<Bookings />} />
@@ -528,14 +464,11 @@ function AppContent() {
     </div>
   );
 }
-
-// The root App component just provides the BrowserRouter
 function App() {
   return (
     <BrowserRouter>
-      <AppContent /> {/* Render the AppContent component inside BrowserRouter */}
+      <AppContent /> 
     </BrowserRouter>
   );
 }
-
 export default App;
