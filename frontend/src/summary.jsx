@@ -1,60 +1,47 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { updateUserData } from './api'; // ✅ import API call
+import { updateUserData } from './api';
 import './App.css';
-
 function Summary() {
   const location = useLocation();
   const navigate = useNavigate();
   const booking = location.state?.booking;
-
   const [coinError, setCoinError] = useState(false);
   const [coins, setCoins] = useState(() => parseInt(localStorage.getItem("userCoins") || "0"));
-
   if (!booking) {
     return <p style={{ padding: '30px', textAlign: 'center' }}>No booking details available. Please return to the main page.</p>;
   }
-
   const handleConfirmClick = async () => {
     const price = booking.price || (booking.type === 'Train' ? 150 : booking.type === 'Movie' ? 250 : 500);
-
     if (coins < price) {
       setCoinError(true);
       return;
     }
-
     const newCoins = coins - price;
     setCoins(newCoins);
     setCoinError(false);
     localStorage.setItem("userCoins", newCoins.toString());
-
-    // Save new booking
     const existing = JSON.parse(localStorage.getItem("myBookings") || "[]");
     const uniqueBooking = { ...booking, id: Date.now() + Math.random() };
     const updatedBookings = [...existing, uniqueBooking];
     localStorage.setItem("myBookings", JSON.stringify(updatedBookings));
-
-    // ✅ Sync with backend
     const userId = localStorage.getItem("userId");
     try {
       await updateUserData(userId, newCoins, updatedBookings);
-    } catch (err) {
+    } 
+    catch (err) {
       console.error("Failed to sync with backend:", err);
     }
-
     navigate('/bookings');
   };
-
   const handleCancel = () => {
     navigate('/home');
   };
-
   return (
     <div className="main-page-wrapper" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', position: 'relative' }}>
       <h2 className="main-page-header" style={{ justifyContent: 'center', fontSize: '2em', marginBottom: '30px' }}>
         SUMMARY
       </h2>
-
       <div
         className="main-section"
         style={{
@@ -79,7 +66,6 @@ function Summary() {
         )}
         <div>Price: ₹{booking.price || (booking.type === 'Train' ? 150 : booking.type === 'Movie' ? 250 : 500)}</div>
       </div>
-
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px', marginTop: '40px' }}>
         {coinError && (
           <p style={{ color: 'red', marginBottom: '10px', fontWeight: 'bold' }}>
@@ -106,5 +92,4 @@ function Summary() {
     </div>
   );
 }
-
 export default Summary;
